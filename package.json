@@ -1,0 +1,24 @@
+{
+    "name": "examen",
+    "version": "1.0.0",
+    "description": "",
+    "nodemonConfig": {
+        "ext": "js,hbs"
+    },
+    "main": "index.js",
+    "scripts": {
+        "start": "node server.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "nodemon": "nodemon server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "express-fileupload": "^1.2.1",
+        "fs": "0.0.1-security",
+        "hbs": "^4.1.2",
+        "neat-csv": "^6.0.1"
+    }
+}
