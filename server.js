@@ -26,16 +26,38 @@ app.get('/', function(req, res) {
 app.get('/vacunas', function(req, res) {
     res.render('vacunas', {});
 });
+app.get('/verificar/:est', function(req, res) {
+    if (req.params.est) {
+        console.log(req.params.est);
+        res.render('verificar', {
+            estado: true
+        });
+    } else {
+        res.render('verificar', {
+
+        });
+    }
+
+});
+app.get('/verificar', function(req, res) {
+    res.render('verificar', {});
+});
 
 app.get('/ciudadanos', function(req, res) {
     res.render('ciudadanos', {});
 });
 
-app.get('/inoculados', function(req, res) {
-    res.render('inoculados', {});
+app.get('/inoculados/:admin', function(req, res) {
+    if (req.params.admin == 'admin') {
+        res.render('inoculados', {
+            admin: true
+        });
+    } else {
+        res.render('inoculados', {
+            ciu: true
+        });
+    }
 });
-
-
 app.post('/vacunas', function(req, res) {
     const vacunas = {
         sinovac: {
@@ -93,9 +115,7 @@ app.post('/ciudadanos', async(req, res) => {
 
 
 
-                res.render("ciudadanos", {
-                    msg2: "archivo cargado con éxito"
-                })
+                res.redirect('verificar/est=true');
             }
         } else {
             res.render("ciudadanos", {
@@ -127,7 +147,7 @@ app.post('/addciudadanos', async(req, res) => {
 });
 app.post('/guardarCiu', async(req, res) => {
 
-    res.send(ciudadanos)
+    res.redirect('verificar/est=true');
 });
 app.listen(port, () => {
     console.log("Servidor Iniciado, escuchando el puerto 3000");

@@ -99,11 +99,7 @@
                                 </div>
                                 {{#if msg}}
                                             <br>
-                                                <h6 class="bg-danger text-white">{{msg}}</h6>
-                                {{/if}}
-                                {{#if msg2}}
-                                            <br>
-                                                <h6 class="bg-success  text-white">{{msg2}}</h6>
+                                                <h6 class="bg-danger text-white content">{{msg}}</h6>
                                 {{/if}}
                             </div>
                         </div>
@@ -170,5 +166,14 @@
 
     <script src="../assets/js/dashboard.js"></script>
 </body>
-
+ {{#if msg}}
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".content").fadeOut(1500);
+    },2000);
+});
+</script>
+{{/if}}
 </html>
