@@ -19,12 +19,20 @@ hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs');
 
 // Rutas de la página web
+app.get('/', function(req, res) {
+    res.render('vacunas', {});
+});
+
 app.get('/vacunas', function(req, res) {
     res.render('vacunas', {});
 });
 
 app.get('/ciudadanos', function(req, res) {
     res.render('ciudadanos', {});
+});
+
+app.get('/inoculados', function(req, res) {
+    res.render('inoculados', {});
 });
 
 
