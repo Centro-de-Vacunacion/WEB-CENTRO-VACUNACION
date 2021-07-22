@@ -9,7 +9,7 @@
     <meta name="generator" content="Hugo 0.84.0">
     <title>Inicio - Parametrizar</title>
 
-    <!-- Bootstrap core CSS -->
+ <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
@@ -35,19 +35,15 @@
 
 <body>
 
-    {{> header}}
+{{> header}}
 
     <div class="container-fluid">
         <div class="row">
-            {{#if admin}}
-            {{> sidebar}}
-            {{/if}}
-            {{#if ciu}}
             {{> sidebar2}}
-            {{/if}}
+
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Listado de Ciudadanos Inoculados</h1>
+                    <h1 class="h2">Verificar Ciudadano</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -60,44 +56,15 @@
                     </div>
                 </div>
 
-                <table class="table table-responsive table-striped table-sm table-success">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">Cédula</th>
-                            <th scope="col" class="text-center">Nombre</th>
-                            <th scope="col" class="text-center">Edad</th>
-                            <th scope="col" class="text-center">Vacuna</th>
-
-                            <th scope="col" class="text-center">Razón</th>
-                            <th scope="col" class="text-center">Dosis</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        {{#if ciudadanos}} {{#each ciudadanos}}
-                        <tr>
-                            <td class="text-center">{{this.cedula}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                        </tr>
-
-                        {{/each}} {{else}}
-                        <tr>
-                            <td class="text-center">Vacío</td>
-                            <td class="text-center">Vacío</td>
-                            <td class="text-center">Vacío</td>
-                            <td class="text-center">Vacío</td>
-                            <td class="text-center">Vacío</td>
-                            <td class="text-center">Vacío</td>
-                        </tr>
-                        {{/if}}
-
-                    </tbody>
-
-                </table>
+            <div>
+                {{#if estado}}
+                    <h6 class="bg-success text-white content">Datos guardados con éxito</h6>
+                {{/if}}
+                {{#if estadoF}}
+                    <h6 class="bg-danger text-white content">Error al guardar los datos</h6>
+                {{/if}}
+            </div>
+                
 
         </div>
 
@@ -113,5 +80,15 @@
 
     <script src="../assets/js/dashboard.js"></script>
 </body>
+{{#if estado}}
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".content").fadeOut(1500);
+    },2000);
+});
+</script>
+{{/if}}
 
 </html>

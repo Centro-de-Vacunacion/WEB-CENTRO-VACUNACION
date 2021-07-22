@@ -3,7 +3,9 @@ const app = express();
 const hbs = require("hbs");
 const { leerArchivoCSV } = require('./control/leer')
 const fileUpload = require('express-fileupload');
+const { getVacunas, updateVacunas } = require('./control/vacunas');
 let ciudadanos = [];
+let edadMinina;
 //Puerto
 const port = process.env.PORT || 3000;
 
@@ -20,48 +22,83 @@ app.set('view engine', 'hbs');
 
 // Rutas de la página web
 app.get('/', function(req, res) {
-    res.render('vacunas', {});
+    res.redirect('vacunas');
 });
 
 app.get('/vacunas', function(req, res) {
     res.render('vacunas', {});
+});
+app.get('/verificar/:est', function(req, res) {
+    if (req.params.est) {
+        res.render('verificar', {
+            estado: true
+        });
+    } else {
+        res.render('verificar', {
+
+        });
+    }
+
+});
+app.get('/verificar', function(req, res) {
+    res.render('verificar', {});
 });
 
 app.get('/ciudadanos', function(req, res) {
     res.render('ciudadanos', {});
 });
 
-app.get('/inoculados', function(req, res) {
-    res.render('inoculados', {});
-});
-
-
-app.post('/vacunas', function(req, res) {
-    const vacunas = {
-        sinovac: {
-            nombre: 'Sinovac',
-            dosis: {
-                primera: req.body.Psinovac,
-                segunda: req.body.Ssinovac,
-            }
-        },
-        pfizer: {
-            nombre: 'Pfizer',
-            dosis: {
-                primera: req.body.Ppfizer,
-                segunda: req.body.Spfizer,
-            }
-        },
-        astrazeneca: {
-            nombre: 'Astrazeneca',
-            dosis: {
-                primera: req.body.Pastra,
-                segunda: req.body.Sastra,
-            }
-        },
-        edadMínima: req.body.edad
+app.get('/inoculados/:admin', function(req, res) {
+    if (req.params.admin == 'admin') {
+        res.render('inoculados', {
+            admin: true
+        });
+    } else {
+        res.render('inoculados', {
+            ciu: true
+        });
     }
-    res.send(vacunas);
+});
+app.post('/vacunas', async(req, res) => {
+    const vacunas = [{
+            id: '60f8fb9dd85234e011c5d781',
+            cantidad: req.body.Psinovac,
+        },
+        {
+            id: '60f8fb9dd85234e011c5d782',
+            cantidad: req.body.Ssinovac,
+        },
+        {
+            id: '60f8fb9dd85234e011c5d783',
+            cantidad: req.body.Ppfizer,
+        },
+        {
+            id: '60f9be08f7f78a363c11e41a',
+            cantidad: req.body.Spfizer,
+        },
+        {
+            id: '60f8fb9dd85234e011c5d785',
+            cantidad: req.body.Pastra,
+        },
+        {
+            id: '60f8fb9dd85234e011c5d786',
+            cantidad: req.body.Sastra,
+        },
+
+    ];
+
+    edadMinina = req.body.edad;
+    if (await updateVacunas(vacunas)) {
+        res.render('vacunas', {
+            estado: true
+        })
+    } else {
+        res.render('vacunas', {
+            estadoF: true
+        })
+    }
+
+
 });
 
 
@@ -93,9 +130,7 @@ app.post('/ciudadanos', async(req, res) => {
 
 
 
-                res.render("ciudadanos", {
-                    msg2: "archivo cargado con éxito"
-                })
+                res.redirect('verificar/est=true');
             }
         } else {
             res.render("ciudadanos", {
@@ -127,7 +162,7 @@ app.post('/addciudadanos', async(req, res) => {
 });
 app.post('/guardarCiu', async(req, res) => {
 
-    res.send(ciudadanos)
+    res.redirect('verificar/est=true');
 });
 app.listen(port, () => {
     console.log("Servidor Iniciado, escuchando el puerto 3000");
