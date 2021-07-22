@@ -9,7 +9,7 @@
     <meta name="generator" content="Hugo 0.84.0">
     <title>Inicio - Parametrizar</title>
 
- <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
@@ -35,12 +35,7 @@
 
 <body>
 
-    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><img src="../assets/img/icono.png" width="11%" alt="">SISTEMA UPS-T-VACUNE</a>
-
-        <a class="nav-link text-white" href="#">Salir</a>
-
-    </header>
+    {{> header}}
 
     <div class="container-fluid">
         <div class="row">
@@ -61,48 +56,44 @@
                     </div>
                 </div>
 
-                <table class="table table-striped table-sm table-success">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="text-center">Cédula</th>
-                                        <th scope="col" class="text-center">Nombre</th>
-                                        <th scope="col" class="text-center">Edad</th>
-                                        <th scope="col" class="text-center">Vacuna</th>
-                                        
-                                        <th scope="col" class="text-center">Razón</th>
-                                        <th scope="col" class="text-center">Dosis</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                        {{#if ciudadanos}}
-                                        
-                                        {{#each ciudadanos}}
-                                        <tr>
-                                        <td class="text-center">{{this.cedula}}</td>
-                                        <td class="text-center">{{this.nombre}}</td>
-                                        <td class="text-center">{{this.nombre}}</td>
-                                        <td class="text-center">{{this.nombre}}</td>
-                                        <td class="text-center">{{this.nombre}}</td>
-                                        <td class="text-center">{{this.nombre}}</td>
-                                        </tr>
+                <table class="table table-responsive table-striped table-sm table-success">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Cédula</th>
+                            <th scope="col" class="text-center">Nombre</th>
+                            <th scope="col" class="text-center">Edad</th>
+                            <th scope="col" class="text-center">Vacuna</th>
 
-                                        {{/each}}
-                                        
-                                        {{else}}
-                                        <tr>
-                                        <td class="text-center">Vacío</td>
-                                        <td class="text-center">Vacío</td>
-                                        <td class="text-center">Vacío</td>
-                                        <td class="text-center">Vacío</td>
-                                        <td class="text-center">Vacío</td>
-                                        <td class="text-center">Vacío</td>
-                                        </tr>
-                                        {{/if}}
+                            <th scope="col" class="text-center">Razón</th>
+                            <th scope="col" class="text-center">Dosis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                                </tbody>
+                        {{#if ciudadanos}} {{#each ciudadanos}}
+                        <tr>
+                            <td class="text-center">{{this.cedula}}</td>
+                            <td class="text-center">{{this.nombre}}</td>
+                            <td class="text-center">{{this.nombre}}</td>
+                            <td class="text-center">{{this.nombre}}</td>
+                            <td class="text-center">{{this.nombre}}</td>
+                            <td class="text-center">{{this.nombre}}</td>
+                        </tr>
 
-                            </table>
+                        {{/each}} {{else}}
+                        <tr>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                        </tr>
+                        {{/if}}
+
+                    </tbody>
+
+                </table>
 
         </div>
 
