@@ -91,7 +91,7 @@ app.post('/ciudadanos', async(req, res) => {
             }
         } else {
             res.render("ciudadanos", {
-                msg: "Archivo no válido"
+                msg: "Solo se acepta archivos csv"
             })
         }
     } else if (ciudadano) {
@@ -119,6 +119,7 @@ app.post('/addciudadanos', async(req, res) => {
 });
 app.post('/guardarCiu', async(req, res) => {
 
+    res.send(ciudadanos)
 });
 app.listen(port, () => {
     console.log("Servidor Iniciado, escuchando el puerto 3000");
