@@ -2,10 +2,16 @@ const express = require('express');
 const app = express();
 const hbs = require("hbs");
 const { leerArchivoCSV } = require('./control/leer')
+const { calcularEdad } = require('./control/config')
 const fileUpload = require('express-fileupload');
-const { getVacunas, updateVacunas } = require('./control/vacunas');
+const { getVacunas, updateVacunas, } = require('./control/vacunas');
+const { getUsuarios, insertUser } = require('./control/usuarios');
+const { stringify } = require('qs');
 let ciudadanos = [];
 let edadMinina;
+
+// Helpers
+require('./hbs/helpers');
 //Puerto
 const port = process.env.PORT || 3000;
 
@@ -15,16 +21,15 @@ app.use(fileUpload());
 // Estaticas
 app.use(express.static(__dirname + '/public'));
 
-
 // Establecer el motor para las vistas
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs');
+
 
 // Rutas de la página web
 app.get('/', function(req, res) {
     res.redirect('vacunas');
 });
-
 app.get('/vacunas', function(req, res) {
     res.render('vacunas', {});
 });
@@ -43,11 +48,9 @@ app.get('/verificar/:est', function(req, res) {
 app.get('/verificar', function(req, res) {
     res.render('verificar', {});
 });
-
 app.get('/ciudadanos', function(req, res) {
     res.render('ciudadanos', {});
 });
-
 app.get('/inoculados/:admin', function(req, res) {
     if (req.params.admin == 'admin') {
         res.render('inoculados', {
@@ -60,6 +63,7 @@ app.get('/inoculados/:admin', function(req, res) {
     }
 });
 app.post('/vacunas', async(req, res) => {
+    edadMinina = req.body.edad;
     const vacunas = [{
             id: '60f8fb9dd85234e011c5d781',
             cantidad: req.body.Psinovac,
@@ -87,7 +91,7 @@ app.post('/vacunas', async(req, res) => {
 
     ];
 
-    edadMinina = req.body.edad;
+
     if (await updateVacunas(vacunas)) {
         res.render('vacunas', {
             estado: true
@@ -100,15 +104,12 @@ app.post('/vacunas', async(req, res) => {
 
 
 });
-
-
 app.post('/ciudadanos', async(req, res) => {
     let EDFile;
     let ciudadano;
     if (req.files.file) {
         EDFile = req.files.file;
     }
-
     if (req.body.cedula && req.body.name) {
         ciudadano = {
             cedula: req.body.cedula,
@@ -116,7 +117,6 @@ app.post('/ciudadanos', async(req, res) => {
 
         }
     }
-
     if (EDFile) {
         let name = EDFile.name.split(".");
         let ext = name[name.length - 1];
@@ -127,10 +127,25 @@ app.post('/ciudadanos', async(req, res) => {
             });
             if (await EDFile.mv) {
                 let data = await leerArchivoCSV(__dirname + "\\archivo\\" + EDFile.name);
+                if (data[0].cedula != undefined && data[0].nombre != undefined && data[0].apellido != undefined) {
+                    ciudadanos = data;
+                    let msg = await insertUser(ciudadanos);
+                    if (msg) {
+                        res.redirect('verificar/est=true');
+                    } else {
+                        res.render('ciudadanos', {
+                            msg: 'Error al guardar los datos'
+                        })
+                    }
+                } else {
+                    res.render('ciudadanos', {
+                        msg: 'Los datos del archivo no son validos'
+                    })
+                }
 
 
-
-                res.redirect('verificar/est=true');
+            } else {
+                return false
             }
         } else {
             res.render("ciudadanos", {
@@ -147,10 +162,11 @@ app.post('/ciudadanos', async(req, res) => {
 });
 app.post('/addciudadanos', async(req, res) => {
     let ciudadano;
-    if (req.body.cedula && req.body.name) {
+    if (req.body.cedula && req.body.name && req.body.apellido) {
         ciudadano = {
             cedula: req.body.cedula,
             nombre: req.body.name,
+            apellido: req.body.apellido
         }
     }
     if (ciudadano) {
@@ -162,7 +178,48 @@ app.post('/addciudadanos', async(req, res) => {
 });
 app.post('/guardarCiu', async(req, res) => {
 
-    res.redirect('verificar/est=true');
+    let msg = await insertUser(ciudadanos);
+    if (msg) {
+        res.redirect('verificar/est=true');
+    } else {
+        res.render('ciudadanos', {
+
+        })
+    }
+
+});
+app.post('/verificarUser', async(req, res) => {
+    let cedula = req.body.cedula;
+    let fecha = req.body.anio;
+    let edad = await calcularEdad(fecha);
+    let usuarios = await getUsuarios();
+
+    let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
+
+    if (usuario) {
+        res.render('verificar', {
+            alert2: true,
+            alert: true,
+            msg: 'Tiene cita agendada',
+            msg2: 'Si'
+        })
+    }
+    if (edad < edadMinina) {
+        res.render('verificar', {
+            alert2: true,
+            alert: true,
+            msg: 'Fuera del rango de edad',
+            msg2: "No"
+        })
+    } else {
+        res.render('verificar', {
+            alert2: true,
+            alert: true,
+            msg: 'Dentro del rango de edad',
+            msg2: 'Si'
+        })
+    }
+
 });
 app.listen(port, () => {
     console.log("Servidor Iniciado, escuchando el puerto 3000");

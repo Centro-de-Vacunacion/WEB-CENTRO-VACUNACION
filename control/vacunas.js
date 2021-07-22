@@ -38,4 +38,5 @@ const getVacunas = async() => {
     }
 }
 
+
 module.exports = { updateVacunas, getVacunas }
