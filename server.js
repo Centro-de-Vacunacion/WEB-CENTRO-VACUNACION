@@ -3,7 +3,9 @@ const app = express();
 const hbs = require("hbs");
 const { leerArchivoCSV } = require('./control/leer')
 const fileUpload = require('express-fileupload');
+const { getVacunas, updateVacunas } = require('./control/vacunas');
 let ciudadanos = [];
+let edadMinina;
 //Puerto
 const port = process.env.PORT || 3000;
 
@@ -20,7 +22,7 @@ app.set('view engine', 'hbs');
 
 // Rutas de la página web
 app.get('/', function(req, res) {
-    res.render('vacunas', {});
+    res.redirect('vacunas');
 });
 
 app.get('/vacunas', function(req, res) {
@@ -28,7 +30,6 @@ app.get('/vacunas', function(req, res) {
 });
 app.get('/verificar/:est', function(req, res) {
     if (req.params.est) {
-        console.log(req.params.est);
         res.render('verificar', {
             estado: true
         });
@@ -58,32 +59,46 @@ app.get('/inoculados/:admin', function(req, res) {
         });
     }
 });
-app.post('/vacunas', function(req, res) {
-    const vacunas = {
-        sinovac: {
-            nombre: 'Sinovac',
-            dosis: {
-                primera: req.body.Psinovac,
-                segunda: req.body.Ssinovac,
-            }
+app.post('/vacunas', async(req, res) => {
+    const vacunas = [{
+            id: '60f8fb9dd85234e011c5d781',
+            cantidad: req.body.Psinovac,
         },
-        pfizer: {
-            nombre: 'Pfizer',
-            dosis: {
-                primera: req.body.Ppfizer,
-                segunda: req.body.Spfizer,
-            }
+        {
+            id: '60f8fb9dd85234e011c5d782',
+            cantidad: req.body.Ssinovac,
         },
-        astrazeneca: {
-            nombre: 'Astrazeneca',
-            dosis: {
-                primera: req.body.Pastra,
-                segunda: req.body.Sastra,
-            }
+        {
+            id: '60f8fb9dd85234e011c5d783',
+            cantidad: req.body.Ppfizer,
         },
-        edadMínima: req.body.edad
+        {
+            id: '60f9be08f7f78a363c11e41a',
+            cantidad: req.body.Spfizer,
+        },
+        {
+            id: '60f8fb9dd85234e011c5d785',
+            cantidad: req.body.Pastra,
+        },
+        {
+            id: '60f8fb9dd85234e011c5d786',
+            cantidad: req.body.Sastra,
+        },
+
+    ];
+
+    edadMinina = req.body.edad;
+    if (await updateVacunas(vacunas)) {
+        res.render('vacunas', {
+            estado: true
+        })
+    } else {
+        res.render('vacunas', {
+            estadoF: true
+        })
     }
-    res.send(vacunas);
+
+
 });
 
 

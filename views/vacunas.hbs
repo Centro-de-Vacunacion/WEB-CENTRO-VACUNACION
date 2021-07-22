@@ -55,9 +55,11 @@
         </button>
                     </div>
                 </div>
-
+                {{#if estado}}
+                    <h6 class="bg-success text-white content">Datos guardados con éxito</h6>
+                {{/if}}
                 <h4>Número de dosis por cada marca de vacuna.</h4>
-                <form action="" method="post">
+                <form action="vacunas" method="POST">
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-4">
                             <div class="bg-light p-5 rounded">
@@ -68,9 +70,9 @@
                                 <div class="mb-3">
 
                                     <label class="form-label">Primera Dosis: </label>
-                                    <input type="number" class="form-control" name="Psinovac" placeholder="número de dosis">
+                                    <input type="number" class="form-control" name="Psinovac" placeholder="número de dosis" required>
                                     <label class="form-label">Segunda Dosis: </label>
-                                    <input type="number" class="form-control" name="Ssinovac" placeholder="número de dosis">
+                                    <input type="number" class="form-control" name="Ssinovac" placeholder="número de dosis" required>
 
 
                                 </div>
@@ -84,9 +86,9 @@
                                 <div class="mb-3">
 
                                     <label class="form-label">Primera Dosis: </label>
-                                    <input type="number" class="form-control" name="Ppfizer" placeholder="número de dosis">
+                                    <input type="number" class="form-control" name="Ppfizer" placeholder="número de dosis" required>
                                     <label class="form-label">Segunda Dosis: </label>
-                                    <input type="number" class="form-control" name="Spfizer" placeholder="número de dosis">
+                                    <input type="number" class="form-control" name="Spfizer" placeholder="número de dosis" required>
 
 
                                 </div>
@@ -100,9 +102,9 @@
                                 <div class="mb-3">
 
                                     <label class="form-label">Primera Dosis: </label>
-                                    <input type="number" class="form-control" name="Pastra" placeholder="número de dosis">
+                                    <input type="number" class="form-control" name="Pastra" placeholder="número de dosis" required>
                                     <label class="form-label">Segunda Dosis: </label>
-                                    <input type="number" class="form-control" name="Sastra" placeholder="número de dosis">
+                                    <input type="number" class="form-control" name="Sastra" placeholder="número de dosis" required>
 
 
                                 </div>
@@ -111,7 +113,7 @@
                     </div>
                     <div class="text-center">
                     <h5>Edad mínima para la vacunación: </h5>
-                    <input type="number" class="" style="padding: 10px; border-color: lightgrey;" name="edad" placeholder="edad mínima">
+                    <input type="number" class="" style="padding: 10px; border-color: lightgrey;" name="edad" placeholder="edad mínima" required>
                     <br>
                     <hr>
                         <button type="submit" class="btn btn-primary btn-lg">Guardar</button>
@@ -135,5 +137,14 @@
 
     <script src="../assets/js/dashboard.js"></script>
 </body>
-
+{{#if estado}}
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".content").fadeOut(1500);
+    },2000);
+});
+</script>
+{{/if}}
 </html>

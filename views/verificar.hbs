@@ -58,7 +58,10 @@
 
             <div>
                 {{#if estado}}
-                                                <h6 class="bg-success text-white content">Datos guardados con éxito</h6>
+                    <h6 class="bg-success text-white content">Datos guardados con éxito</h6>
+                {{/if}}
+                {{#if estadoF}}
+                    <h6 class="bg-danger text-white content">Error al guardar los datos</h6>
                 {{/if}}
             </div>
                 
