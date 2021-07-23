@@ -40,15 +40,13 @@ app.get('/verificar', function(req, res) {
 app.get('/ciudadanos', function(req, res) {
     res.render('ciudadanos', {});
 });
-app.get('/inoculados/:admin', async(req, res)=> {
+app.get('/inoculados/:admin', async(req, res) => {
     let usuarios = await getUsuarios();
-    
-
     usuarios.forEach(element => {
         console.log(element.cedula);
         console.log(element.nombre);
         console.log(element.vacunacion[0].nombre_vacuna);
-        console.log(element.vacunacion[0]);
+        console.log(element.vacunacion[1]);
 
     });
 
@@ -200,7 +198,7 @@ app.post('/verificarUser', async(req, res) => {
     let edad = await calcularEdad(fecha);
     let usuarios = await getUsuarios();
 
-    let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
+    let usuario = usuarios.find(obj => obj.cedula == cedula);
     let vced = validateDocument.getValidateDocument('cedula', cedula);
     if (vced.status == "SUCCESS") {
         if (usuario) {
