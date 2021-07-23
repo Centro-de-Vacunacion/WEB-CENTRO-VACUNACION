@@ -135,7 +135,15 @@ app.post('/ciudadanos', async(req, res) => {
                 return true
             });
             if (await EDFile.mv) {
-                let data = await leerArchivoCSV(__dirname + "\\archivo\\" + EDFile.name);
+                let data;
+                try {
+
+                    console.log(__dirname + "\\archivo\\" + EDFile.name);
+                    data = await leerArchivoCSV(__dirname + "\\archivo\\" + EDFile.name);
+                } catch (error) {
+                    console.log(error);
+                }
+
                 if (data[0].cedula != undefined && data[0].nombre != undefined && data[0].apellido != undefined) {
                     ciudadanos = data;
                     let msg = await insertUser(ciudadanos);
