@@ -45,15 +45,17 @@ app.get('/inoculados/:admin', async(req, res) => {
     let usuarios = await getUsuarios();
     let users = [];
     usuarios.forEach(element => {
-        users.push({
-            cedula: element.cedula,
-            nombre: element.nombre,
-            edad: element.year,
-            vacuna: element.vacunacion[0].nombre_vacuna,
-            dosis1: element.vacunacion[0].Dosis1ra,
-            dosis2: element.vacunacion[1].Dosis2da,
-
-        })
+        if (element.vacunacion[0]) {
+            console.log(element.vacunacion[0]);
+            users.push({
+                cedula: element.cedula,
+                nombre: element.nombre,
+                edad: element.year,
+                vacuna: element.vacunacion[0].nombre_vacuna,
+                dosis1: element.vacunacion[0].Dosis1ra,
+                dosis2: element.vacunacion[1].Dosis2da,
+            })
+        }
     });
 
     console.log(users);
@@ -64,7 +66,8 @@ app.get('/inoculados/:admin', async(req, res) => {
         });
     } else {
         res.render('inoculados', {
-            ciu: true
+            ciu: true,
+            users
         });
     }
 });
