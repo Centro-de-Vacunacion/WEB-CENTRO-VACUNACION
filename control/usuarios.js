@@ -3,7 +3,7 @@ var qs = require('qs');
 
 const getUsuarios = async() => {
     try {
-        let url = `http://localhost:3001/api/usuarios/`;
+        let url = `http://api-vacunas-ups.herokuapp.com/api/usuarios/`;
         const respuesta = await axios.get(url);
 
         return respuesta.data;
@@ -26,7 +26,7 @@ const insertUser = async(usuarios) => {
             });
             var config = {
                 method: 'post',
-                url: `http://localhost:3001/api/usuarios/`,
+                url: `http://api-vacunas-ups.herokuapp.com/api/usuarios/`,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },

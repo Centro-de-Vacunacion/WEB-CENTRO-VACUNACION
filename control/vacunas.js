@@ -9,7 +9,7 @@ const updateVacunas = async(vacunas) => {
             });
             var config = {
                 method: 'put',
-                url: `http://localhost:3001/api/vacunas/${vacunas[vacuna].id}`,
+                url: `http://api-vacunas-ups.herokuapp.com/api/vacunas/${vacunas[vacuna].id}`,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -29,7 +29,7 @@ const updateVacunas = async(vacunas) => {
 }
 const getVacunas = async() => {
     try {
-        let url = `http://localhost:3001/api/vacunas/`;
+        let url = `http://api-vacunas-ups.herokuapp.com/api/vacunas/`;
         const respuesta = await axios.get(url);
 
         return respuesta.data;
@@ -51,7 +51,7 @@ const updateCantidadVacuna = async(vacunaA) => {
 
             var config = {
                 method: 'put',
-                url: `http://localhost:3001/api/vacunas/${vacunaA._id}`,
+                url: `http://api-vacunas-ups.herokuapp.com/api/vacunas/${vacunaA._id}`,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
