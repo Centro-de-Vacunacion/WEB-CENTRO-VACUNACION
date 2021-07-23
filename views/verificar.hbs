@@ -73,6 +73,9 @@
 
 
                         <div class="pt-5">
+                            {{#if alertci}}
+                                <h6 style="background-color: red;">{{msgci}}</h6>
+                            {{/if}}
                             {{#if alert2}}
                                 <h6>Puede vacunarse: {{msg2}}</h6>
                             {{/if}}
@@ -117,15 +120,8 @@
                                 
                                 </div>
                             </div>
-
-
-
                         </div>
                         {{/if}}
-                        
-
-
-
                         <script type="text/javascript">
                             function showDiv(select) {
                                 if (select.value == 2) {

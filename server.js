@@ -7,6 +7,7 @@ const fileUpload = require('express-fileupload');
 const { getVacunas, updateVacunas, } = require('./control/vacunas');
 const { getUsuarios, insertUser } = require('./control/usuarios');
 const { stringify } = require('qs');
+const validateDocument = require('validate-document-ecuador');
 let ciudadanos = [];
 let edadMinina;
 
@@ -195,30 +196,43 @@ app.post('/verificarUser', async(req, res) => {
     let usuarios = await getUsuarios();
 
     let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
-
-    if (usuario) {
-        res.render('verificar', {
-            alert2: true,
-            alert: true,
-            msg: 'Tiene cita agendada',
-            msg2: 'Si'
-        })
-    }
-    if (edad < edadMinina) {
-        res.render('verificar', {
-            alert2: true,
-            alert: true,
-            msg: 'Fuera del rango de edad',
-            msg2: "No"
-        })
+    let vced = validateDocument.getValidateDocument('cedula', cedula);
+    if (vced.status == "SUCCESS") {
+        console.log("correcto");
+        if (usuario) {
+            res.render('verificar', {
+                alert2: true,
+                alert: true,
+                msg: 'Tiene cita agendada',
+                msg2: 'Si'
+            })
+        } else if (edad < edadMinina) {
+            res.render('verificar', {
+                alert2: true,
+                alert: true,
+                msg: 'Fuera del rango de edad',
+                msg2: "No"
+            })
+        } else {
+            res.render('verificar', {
+                alert2: true,
+                alert: true,
+                msg: 'Dentro del rango de edad',
+                msg2: 'Si'
+            })
+        }
     } else {
         res.render('verificar', {
-            alert2: true,
-            alert: true,
-            msg: 'Dentro del rango de edad',
-            msg2: 'Si'
+            alertci: true,
+            //alert: true,
+            //msg: 'Dentro del rango de edad',
+            msgci: vced.message
         })
+
     }
+    //console.log(vced.status);
+
+
 
 });
 app.listen(port, () => {
