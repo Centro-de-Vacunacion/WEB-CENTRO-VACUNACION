@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Inicio - Parametrizar</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="../assets/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+    {{> header}}
+
+    <div class="container-fluid">
+        <div class="row">
+            {{#if admin}}
+            {{> sidebar}}
+            {{/if}}
+            {{#if ciu}}
+            {{> sidebar2}}
+            {{/if}}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Listado de Ciudadanos Inoculados</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+        </button>
+                    </div>
+                </div>
+
+                <table class="table table-responsive table-striped table-sm table-success">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Cédula</th>
+                            <th scope="col" class="text-center">Nombre</th>
+                            <th scope="col" class="text-center">Edad</th>
+                            <th scope="col" class="text-center">Vacuna</th>
+                            <th scope="col" class="text-center">1ra Dosis</th>
+                            <th scope="col" class="text-center">2da Dosis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {{#if users}} {{#each users}}
+                        <tr>
+                            <td class="text-center">{{this.cedula}}</td>
+                            <td class="text-center">{{this.nombre}}</td>
+                            <td class="text-center">{{this.edad}}</td>
+                            <td class="text-center">{{this.vacuna}}</td>
+                            <td class="text-center">{{this.dosis1}}</td>
+                            <td class="text-center">{{this.dosis2}}</td>
+                        </tr>
+
+                        {{/each}} {{else}}
+                        <tr>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                            <td class="text-center">Vacío</td>
+                        </tr>
+                        {{/if}}
+
+                    </tbody>
+
+                </table>
+
+        </div>
+
+        </main>
+    </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+
+</html>
