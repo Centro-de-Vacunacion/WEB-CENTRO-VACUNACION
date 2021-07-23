@@ -50,7 +50,13 @@
                     <h1 class="h2">Listado de Ciudadanos Inoculados</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
                         </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+        </button>
                     </div>
                 </div>
 
@@ -61,18 +67,20 @@
                             <th scope="col" class="text-center">Nombre</th>
                             <th scope="col" class="text-center">Edad</th>
                             <th scope="col" class="text-center">Vacuna</th>
-                            <th scope="col" class="text-center">Dosis</th>
+                            <th scope="col" class="text-center">1ra Dosis</th>
+                            <th scope="col" class="text-center">2da Dosis</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {{#if ciudadanos}} {{#each ciudadanos}}
+                        {{#if users}} {{#each users}}
                         <tr>
                             <td class="text-center">{{this.cedula}}</td>
                             <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
-                            <td class="text-center">{{this.nombre}}</td>
+                            <td class="text-center">{{this.edad}}</td>
+                            <td class="text-center">{{this.vacuna}}</td>
+                            <td class="text-center">{{this.dosis1}}</td>
+                            <td class="text-center">{{this.dosis2}}</td>
                         </tr>
 
                         {{/each}} {{else}}

@@ -7,6 +7,7 @@ const fileUpload = require('express-fileupload');
 const { getVacunas, updateVacunas, updateCantidadVacuna } = require('./control/vacunas');
 const { getUsuarios, insertUser } = require('./control/usuarios');
 const validateDocument = require('validate-document-ecuador');
+const e = require('express');
 
 let ciudadanos = [];
 let edadMinina;
@@ -28,32 +29,38 @@ app.set('view engine', 'hbs');
 
 
 // Rutas de la página web
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.redirect('vacunas');
 });
-app.get('/vacunas', function(req, res) {
+app.get('/vacunas', function (req, res) {
     res.render('vacunas', {});
 });
-app.get('/verificar', function(req, res) {
+app.get('/verificar', function (req, res) {
     res.render('verificar', {});
 });
-app.get('/ciudadanos', function(req, res) {
+app.get('/ciudadanos', function (req, res) {
     res.render('ciudadanos', {});
 });
-app.get('/inoculados/:admin', async(req, res) => {
+app.get('/inoculados/:admin', async (req, res) => {
     let usuarios = await getUsuarios();
+    let users = [];
     usuarios.forEach(element => {
-        console.log(element.cedula);
-        console.log(element.nombre);
-        console.log(element.vacunacion[0].nombre_vacuna);
-        console.log(element.vacunacion[1]);
+        users.push({
+            cedula: element.cedula,
+            nombre: element.nombre,
+            edad: element.year,
+            vacuna: element.vacunacion[0].nombre_vacuna,
+            dosis1: element.vacunacion[0].Dosis1ra,
+            dosis2: element.vacunacion[1].Dosis2da,
 
+        })
     });
 
+    console.log(users);
     if (req.params.admin == 'admin') {
         res.render('inoculados', {
             admin: true,
-            usuarios
+            users
         });
     } else {
         res.render('inoculados', {
@@ -61,32 +68,32 @@ app.get('/inoculados/:admin', async(req, res) => {
         });
     }
 });
-app.post('/vacunas', async(req, res) => {
+app.post('/vacunas', async (req, res) => {
     edadMinina = req.body.edad;
     const vacunas = [{
-            id: '60f8fb9dd85234e011c5d781',
-            cantidad: req.body.Psinovac,
-        },
-        {
-            id: '60f8fb9dd85234e011c5d782',
-            cantidad: req.body.Ssinovac,
-        },
-        {
-            id: '60f8fb9dd85234e011c5d783',
-            cantidad: req.body.Ppfizer,
-        },
-        {
-            id: '60f9be08f7f78a363c11e41a',
-            cantidad: req.body.Spfizer,
-        },
-        {
-            id: '60f8fb9dd85234e011c5d785',
-            cantidad: req.body.Pastra,
-        },
-        {
-            id: '60f8fb9dd85234e011c5d786',
-            cantidad: req.body.Sastra,
-        },
+        id: '60f8fb9dd85234e011c5d781',
+        cantidad: req.body.Psinovac,
+    },
+    {
+        id: '60f8fb9dd85234e011c5d782',
+        cantidad: req.body.Ssinovac,
+    },
+    {
+        id: '60f8fb9dd85234e011c5d783',
+        cantidad: req.body.Ppfizer,
+    },
+    {
+        id: '60f9be08f7f78a363c11e41a',
+        cantidad: req.body.Spfizer,
+    },
+    {
+        id: '60f8fb9dd85234e011c5d785',
+        cantidad: req.body.Pastra,
+    },
+    {
+        id: '60f8fb9dd85234e011c5d786',
+        cantidad: req.body.Sastra,
+    },
 
     ];
 
@@ -103,7 +110,7 @@ app.post('/vacunas', async(req, res) => {
 
 
 });
-app.post('/ciudadanos', async(req, res) => {
+app.post('/ciudadanos', async (req, res) => {
     let EDFile;
     let ciudadano;
     if (req.files.file) {
@@ -160,7 +167,7 @@ app.post('/ciudadanos', async(req, res) => {
     }
 
 });
-app.post('/addciudadanos', async(req, res) => {
+app.post('/addciudadanos', async (req, res) => {
     let ciudadano;
     if (req.body.cedula && req.body.name && req.body.apellido) {
         ciudadano = {
@@ -176,7 +183,7 @@ app.post('/addciudadanos', async(req, res) => {
         })
     }
 });
-app.post('/guardarCiu', async(req, res) => {
+app.post('/guardarCiu', async (req, res) => {
 
     let msg = await insertUser(ciudadanos);
     ciudadanos = [];
@@ -192,13 +199,13 @@ app.post('/guardarCiu', async(req, res) => {
     }
 
 });
-app.post('/verificarUser', async(req, res) => {
+app.post('/verificarUser', async (req, res) => {
     let cedula = req.body.cedula;
     let fecha = req.body.anio;
     let edad = await calcularEdad(fecha);
     let usuarios = await getUsuarios();
 
-    let usuario = usuarios.find(obj => obj.cedula == cedula);
+    let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
     let vced = validateDocument.getValidateDocument('cedula', cedula);
     if (vced.status == "SUCCESS") {
         if (usuario) {
@@ -235,7 +242,7 @@ app.post('/verificarUser', async(req, res) => {
 
 
 });
-app.post('/asignar', async(req, res) => {
+app.post('/asignar', async (req, res) => {
     let dosis = req.body.dosis;
 
     if (dosis == "1") {
@@ -257,7 +264,6 @@ app.post('/asignar', async(req, res) => {
         let aleatorizado = shuffle(primerasDosisCantidad);
 
         let vacunaAsignada = aleatorizado[0];
-        console.log(vacunaAsignada);
         if (vacunaAsignada) {
             let msg = await updateCantidadVacuna(vacunaAsignada);
             if (msg) {
@@ -279,42 +285,11 @@ app.post('/asignar', async(req, res) => {
             });
         }
     } else if (dosis == "2") {
-        let vacu = await getVacunas();
-        let vacunas = vacu.vacunas;
-        let tipo = req.body.vacuna;
-        cantidad2da = 0
-        let vacunaAsignada2 = [];
-        vacunas.forEach(element => {
-            if (element.nombre == tipo && element.dosis == 2) {
-                cantidad2da = element.cantidad
-                vacunaAsignada2 = element
-            }
-        });
 
-        //console.log(vacunaAsignada2);
 
-        if (cantidad2da > 0) {
-            let msg = await updateCantidadVacuna(vacunaAsignada2);
-            if (msg) {
-                res.render('verificar', {
-                    vacunaA2: true,
-                    alert2: true,
-                    alert: true,
-                    msg2: "Si",
-                    vacunaAsignada2
-                });
-            }
-
-        } else {
-            res.render('verificar', {
-                vacunaF2: true,
-                alert2: true,
-                alert: true,
-                msg2: "Si",
-                msgfail: "Lo sentimos no hay vacunas suficientes"
-            });
-        }
     }
+
+
 
 });
 app.listen(port, () => {
