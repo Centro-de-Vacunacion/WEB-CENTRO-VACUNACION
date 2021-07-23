@@ -54,6 +54,11 @@
         </button>
                     </div>
                 </div>
+                {{#if estado}}
+                    <h6 class="p-3 mb-2 bg-success bg-gradient text-white content">Datos guardados con éxito</h6>
+                    {{/if}} {{#if estadoF}}
+                    <h6 class="p-3 mb-2 bg-danger bg-gradient text-white content">Error al guardar los datos</h6>
+                    {{/if}}
                 <div class="row">
 
                     <div class="col-sm-12 col-md-12 col-lg-5">
@@ -70,7 +75,7 @@
                                 <div class="tab-pane fade show active" id="formulario" role="tabpanel" aria-labelledby="pills-home-tab">
                                     <form action="/addciudadanos" method="post">
                                         <h5>Cédula del ciudadano: </h5>
-                                        <input type="number" class="form-control" min="10" max="10" name="cedula" placeholder="número de cédula">
+                                        <input type="number" class="form-control" name="cedula" placeholder="número de cédula">
                                         <br>
                                         <h5>Nombre del ciudadano: </h5>
                                         <input type="text" class="form-control" name="name" placeholder="Nombre">
@@ -178,6 +183,16 @@ $(document).ready(function() {
         $(".content").fadeOut(1500);
     },2000);
 });
+</script>
+{{/if}}
+{{#if estado}}
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        setTimeout(function() {
+            $(".content").fadeOut(1500);
+        }, 2000);
+    });
 </script>
 {{/if}}
 </html>

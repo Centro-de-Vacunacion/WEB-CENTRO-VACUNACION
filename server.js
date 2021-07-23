@@ -2,11 +2,10 @@ const express = require('express');
 const app = express();
 const hbs = require("hbs");
 const { leerArchivoCSV } = require('./control/leer')
-const { calcularEdad } = require('./control/config')
+const { calcularEdad, shuffle } = require('./control/config')
 const fileUpload = require('express-fileupload');
 const { getVacunas, updateVacunas, } = require('./control/vacunas');
 const { getUsuarios, insertUser } = require('./control/usuarios');
-const { stringify } = require('qs');
 let ciudadanos = [];
 let edadMinina;
 
@@ -32,18 +31,6 @@ app.get('/', function(req, res) {
 });
 app.get('/vacunas', function(req, res) {
     res.render('vacunas', {});
-});
-app.get('/verificar/:est', function(req, res) {
-    if (req.params.est) {
-        res.render('verificar', {
-            estado: true
-        });
-    } else {
-        res.render('verificar', {
-
-        });
-    }
-
 });
 app.get('/verificar', function(req, res) {
     res.render('verificar', {});
@@ -127,9 +114,11 @@ app.post('/ciudadanos', async(req, res) => {
             });
             if (await EDFile.mv) {
                 let data = await leerArchivoCSV(__dirname + "\\archivo\\" + EDFile.name);
+                console.log(data);
                 if (data[0].cedula != undefined && data[0].nombre != undefined && data[0].apellido != undefined) {
                     ciudadanos = data;
                     let msg = await insertUser(ciudadanos);
+                    ciudadanos = [];
                     if (msg) {
                         res.redirect('verificar/est=true');
                     } else {
@@ -179,8 +168,12 @@ app.post('/addciudadanos', async(req, res) => {
 app.post('/guardarCiu', async(req, res) => {
 
     let msg = await insertUser(ciudadanos);
+    ciudadanos = [];
     if (msg) {
-        res.redirect('verificar/est=true');
+        res.render('verificar', {
+            estado: true
+
+        });
     } else {
         res.render('ciudadanos', {
 
@@ -203,8 +196,7 @@ app.post('/verificarUser', async(req, res) => {
             msg: 'Tiene cita agendada',
             msg2: 'Si'
         })
-    }
-    if (edad < edadMinina) {
+    } else if (edad < edadMinina) {
         res.render('verificar', {
             alert2: true,
             alert: true,
@@ -219,6 +211,43 @@ app.post('/verificarUser', async(req, res) => {
             msg2: 'Si'
         })
     }
+
+});
+app.post('/asignar', async(req, res) => {
+    let dosis = req.body.dosis;
+
+    if (dosis == "1") {
+        let primerasDosis = [];
+        let vacu = await getVacunas();
+        let vacunas = vacu.vacunas;
+        for (const i in vacunas) {
+            if (vacunas[i].dosis == dosis) {
+                primerasDosis.push(vacunas[i]);
+            }
+        }
+        let primerasDosisCantidad = [];
+        for (const i in primerasDosis) {
+            if (primerasDosis[i].cantidad > 0) {
+                primerasDosisCantidad.push(primerasDosis[i]);
+            }
+        }
+
+        let aleatorizado = shuffle(primerasDosisCantidad);
+
+        let vacunaAsignada = aleatorizado[0];
+
+        res.render('verificar', {
+            vacunaA: true,
+            alert2: true,
+            alert: true,
+            msg2: "Si",
+            vacunaAsignada
+        })
+
+
+    }
+
+
 
 });
 app.listen(port, () => {

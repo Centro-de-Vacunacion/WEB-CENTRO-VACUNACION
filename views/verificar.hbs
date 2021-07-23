@@ -88,9 +88,9 @@
 
                             <div class="row">
                                 <div class="col-5 text-center">
-                                    <form class="pt-4" action="" method="post">
+                                    <form class="pt-4" action="asignar" method="post">
                                         <h6>Número de dosis (1 o 2):</h6>
-                                        <select id="test" name="form_select" class="form-select py-1" onchange="showDiv(this)">
+                                        <select id="test" name="dosis" class="form-select py-1" onchange="showDiv(this)">
                                             <option value="" selected>Seleccione la Dosis</option>
                                             <option value="1">Primera dosis</option>
                                             <option value="2">Segunda dosis</option>
@@ -98,7 +98,7 @@
 
                                         <div id="hidden_div" class="pt-2" style="display:none;">
                                             <h6>Vacuna inoculada en la primera dosis:</h6>
-                                            <select id="test" name="form_select" class="form-select py-1" onchange="showDiv(this)">
+                                            <select id="test" name="vacuna" class="form-select py-1" onchange="showDiv(this)">
                                             <option value="" selected>Seleccione la vacuna</option>
                                             <option value="1">Sinovac</option>
                                             <option value="2">Pfizer</option>
@@ -109,10 +109,13 @@
 
                                         <button type="submit" class="btn btn-primary m-2">Asignar dosis</button>
                                     </form>
+                                    {{#if vacunaA}}
 
-                                    <div class="m-3">
-                                        Vacuna Asignada: $$$$
+                                  
+                                    <div class="p-3 mb-2 bg-success text-white">
+                                        Vacuna Asignada: {{vacunaAsignada.nombre}}
                                     </div>
+                                      {{/if}}
 
                                 
                                 </div>
