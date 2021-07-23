@@ -61,7 +61,7 @@
                         <form action="verificarUser" method="post">
                             <h5 class="display-6">Datos del ciudadano: </h5>
                             <input type="number" class="py-2" placeholder="Cédula del ciudadano" minlength="10" maxlength="10" style="width: 20%;" name="cedula">
-                            <input type="number" class="py-2" placeholder="Año de Nacimiento" style="width: 20%;" name="anio">
+                            <input type="number" class="py-2" placeholder="Año de Nacimiento" style="width: 20%;" min="1920" max="2021" name="anio">
                             <button type="submit" class="btn btn-primary">Verificar</button>
                         </form>
 
