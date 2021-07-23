@@ -46,13 +46,7 @@
                     <h1 class="h2">Verificar Ciudadano</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-        </button>
                     </div>
                 </div>
 
@@ -104,9 +98,9 @@
                                             <h6>Vacuna inoculada en la primera dosis:</h6>
                                             <select id="test" name="vacuna" class="form-select py-1" onchange="showDiv(this)">
                                             <option value="" selected>Seleccione la vacuna</option>
-                                            <option value="1">Sinovac</option>
-                                            <option value="2">Pfizer</option>
-                                            <option value="2">Astrazeneca</option>
+                                            <option value="Sinovac">Sinovac</option>
+                                            <option value="Pfizer">Pfizer</option>
+                                            <option value="Astrazeneca">Astrazeneca</option>
                                         </select>
 
                                         </div>
@@ -114,28 +108,36 @@
                                         <button type="submit" class="btn btn-primary m-2">Asignar dosis</button>
                                     </form>
                                     {{#if vacunaA}}
-
-                                  
                                     <div class="p-3 mb-2 bg-success text-white">
                                         Vacuna Asignada: {{vacunaAsignada.nombre}}
                                     </div>
                                       {{/if}}
-                                      {{#if vacunaF}}
 
-                                  
-                                    <div class="p-3 mb-2 bg-danger text-white">
-                                        {{msg3}}
+                                    {{#if vacunaA2}}
+                                    <div class="p-3 mb-2 bg-success text-white">
+                                        Dosis disponibles de: {{vacunaAsignada2.nombre}}
                                     </div>
                                       {{/if}}
 
-                                
+                                    {{#if vacunaF}}
+                                    <div class="p-3 mb-2 bg-danger text-white">
+                                        {{msg3}}
+                                    </div>
+                                    {{/if}}
+
+                                    {{#if vacunaF2}}
+                                    <div class="p-3 mb-2 bg-danger text-white">
+                                        {{msgfail}} de la 2da dosis de: {{vacunaAsignada2.nombre}}
+                                    </div>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
                         {{/if}}
                         <script type="text/javascript">
                             function showDiv(select) {
-                                if (select.value == 2) {
+                                sl = document.getElementById('test')                    
+                                if (sl.value == 2) {
                                     document.getElementById('hidden_div').style.display = "block";
                                 } else {
                                     document.getElementById('hidden_div').style.display = "none";

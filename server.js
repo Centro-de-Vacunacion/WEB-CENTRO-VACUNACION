@@ -247,6 +247,7 @@ app.post('/asignar', async(req, res) => {
         let aleatorizado = shuffle(primerasDosisCantidad);
 
         let vacunaAsignada = aleatorizado[0];
+        console.log(vacunaAsignada);
         if (vacunaAsignada) {
             let msg = await updateCantidadVacuna(vacunaAsignada);
             if (msg) {
@@ -268,11 +269,42 @@ app.post('/asignar', async(req, res) => {
             });
         }
     } else if (dosis == "2") {
+        let vacu = await getVacunas();
+        let vacunas = vacu.vacunas;
+        let tipo = req.body.vacuna;
+        cantidad2da = 0
+        let vacunaAsignada2 = [];
+        vacunas.forEach(element => {
+            if (element.nombre == tipo && element.dosis == 2) {
+                cantidad2da = element.cantidad
+                vacunaAsignada2 = element
+            }
+        });
 
+        //console.log(vacunaAsignada2);
 
+        if (cantidad2da > 0) {
+            let msg = await updateCantidadVacuna(vacunaAsignada2);
+            if (msg) {
+                res.render('verificar', {
+                    vacunaA2: true,
+                    alert2: true,
+                    alert: true,
+                    msg2: "Si",
+                    vacunaAsignada2
+                });
+            }
+
+        } else {
+            res.render('verificar', {
+                vacunaF2: true,
+                alert2: true,
+                alert: true,
+                msg2: "Si",
+                msgfail: "Lo sentimos no hay vacunas suficientes"
+            });
+        }
     }
-
-
 
 });
 app.listen(port, () => {
