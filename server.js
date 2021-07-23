@@ -49,9 +49,9 @@ app.get('/inoculados/:admin', async (req, res) => {
             cedula: element.cedula,
             nombre: element.nombre,
             edad: element.year,
-            vacuna: element.vacunacion[0].nombre_vacuna,
-            dosis1: element.vacunacion[0].Dosis1ra,
-            dosis2: element.vacunacion[1].Dosis2da,
+            vacuna: element.vacunacion===[0]?element.vacunacion[0].nombre_vacuna :"",
+            dosis1: element.vacunacion===[0]?element.vacunacion[0].Dosis1ra:"",
+            dosis2: element.vacunacion===[0]?element.vacunacion[1].Dosis2da :"",
 
         })
     });
@@ -205,7 +205,7 @@ app.post('/verificarUser', async (req, res) => {
     let edad = await calcularEdad(fecha);
     let usuarios = await getUsuarios();
 
-    let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
+    let usuario = usuarios.find(obj => obj.cedula == cedula);
     let vced = validateDocument.getValidateDocument('cedula', cedula);
     if (vced.status == "SUCCESS") {
         if (usuario) {
