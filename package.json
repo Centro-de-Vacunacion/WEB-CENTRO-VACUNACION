@@ -9,7 +9,7 @@
     "scripts": {
         "start": "node server.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "nodemon": "nodemon server.js"
+        "dev": "nodemon server.js"
     },
     "keywords": [],
     "author": "",
@@ -23,5 +23,8 @@
         "neat-csv": "^6.0.1",
         "qs": "^6.10.1",
         "validate-document-ecuador": "^1.0.3"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.12"
     }
 }
