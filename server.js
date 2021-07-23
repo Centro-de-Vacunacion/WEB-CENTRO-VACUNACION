@@ -6,6 +6,8 @@ const { calcularEdad, shuffle } = require('./control/config')
 const fileUpload = require('express-fileupload');
 const { getVacunas, updateVacunas, } = require('./control/vacunas');
 const { getUsuarios, insertUser } = require('./control/usuarios');
+const validateDocument = require('validate-document-ecuador');
+
 let ciudadanos = [];
 let edadMinina;
 
@@ -114,7 +116,6 @@ app.post('/ciudadanos', async(req, res) => {
             });
             if (await EDFile.mv) {
                 let data = await leerArchivoCSV(__dirname + "\\archivo\\" + EDFile.name);
-                console.log(data);
                 if (data[0].cedula != undefined && data[0].nombre != undefined && data[0].apellido != undefined) {
                     ciudadanos = data;
                     let msg = await insertUser(ciudadanos);
@@ -188,29 +189,41 @@ app.post('/verificarUser', async(req, res) => {
     let usuarios = await getUsuarios();
 
     let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
-
-    if (usuario) {
-        res.render('verificar', {
-            alert2: true,
-            alert: true,
-            msg: 'Tiene cita agendada',
-            msg2: 'Si'
-        })
-    } else if (edad < edadMinina) {
-        res.render('verificar', {
-            alert2: true,
-            alert: true,
-            msg: 'Fuera del rango de edad',
-            msg2: "No"
-        })
+    let vced = validateDocument.getValidateDocument('cedula', cedula);
+    if (vced.status == "SUCCESS") {
+        console.log("correcto");
+        if (usuario) {
+            res.render('verificar', {
+                alert2: true,
+                alert: true,
+                msg: 'Tiene cita agendada',
+                msg2: 'Si'
+            })
+        } else if (edad < edadMinina) {
+            res.render('verificar', {
+                alert2: true,
+                alert: true,
+                msg: 'Fuera del rango de edad',
+                msg2: "No"
+            })
+        } else {
+            res.render('verificar', {
+                alert2: true,
+                alert: true,
+                msg: 'Dentro del rango de edad',
+                msg2: 'Si'
+            })
+        }
     } else {
         res.render('verificar', {
-            alert2: true,
-            alert: true,
-            msg: 'Dentro del rango de edad',
-            msg2: 'Si'
+            alertci: true,
+            msgci: vced.message
         })
+
     }
+
+
+
 
 });
 app.post('/asignar', async(req, res) => {

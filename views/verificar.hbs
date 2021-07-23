@@ -73,6 +73,9 @@
 
 
                         <div class="pt-5">
+                            {{#if alertci}}
+                                <h6 class="p-3 mb-2 bg-danger bg-gradient text-white content">{{msgci}}</h6>
+                            {{/if}}
                             {{#if alert2}}
                                 <h6>Puede vacunarse: {{msg2}}</h6>
                             {{/if}}
@@ -88,6 +91,7 @@
 
                             <div class="row">
                                 <div class="col-5 text-center">
+
                                     <form class="pt-4" action="asignar" method="post">
                                         <h6>Número de dosis (1 o 2):</h6>
                                         <select id="test" name="dosis" class="form-select py-1" onchange="showDiv(this)">
@@ -120,15 +124,8 @@
                                 
                                 </div>
                             </div>
-
-
-
                         </div>
                         {{/if}}
-                        
-
-
-
                         <script type="text/javascript">
                             function showDiv(select) {
                                 if (select.value == 2) {
@@ -156,7 +153,7 @@
 
     <script src="../assets/js/dashboard.js"></script>
 </body>
-{{#if estado}}
+{{#if (or estado alertci)}}
 <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
