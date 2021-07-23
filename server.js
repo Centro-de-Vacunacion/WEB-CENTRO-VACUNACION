@@ -4,7 +4,7 @@ const hbs = require("hbs");
 const { leerArchivoCSV } = require('./control/leer')
 const { calcularEdad, shuffle } = require('./control/config')
 const fileUpload = require('express-fileupload');
-const { getVacunas, updateVacunas, } = require('./control/vacunas');
+const { getVacunas, updateVacunas, updateCantidadVacuna } = require('./control/vacunas');
 const { getUsuarios, insertUser } = require('./control/usuarios');
 const validateDocument = require('validate-document-ecuador');
 
@@ -191,7 +191,6 @@ app.post('/verificarUser', async(req, res) => {
     let usuario = usuarios.usuarios.find(obj => obj.cedula == cedula);
     let vced = validateDocument.getValidateDocument('cedula', cedula);
     if (vced.status == "SUCCESS") {
-        console.log("correcto");
         if (usuario) {
             res.render('verificar', {
                 alert2: true,
@@ -248,14 +247,27 @@ app.post('/asignar', async(req, res) => {
         let aleatorizado = shuffle(primerasDosisCantidad);
 
         let vacunaAsignada = aleatorizado[0];
-
-        res.render('verificar', {
-            vacunaA: true,
-            alert2: true,
-            alert: true,
-            msg2: "Si",
-            vacunaAsignada
-        })
+        if (vacunaAsignada) {
+            let msg = await updateCantidadVacuna(vacunaAsignada);
+            if (msg) {
+                res.render('verificar', {
+                    vacunaA: true,
+                    alert2: true,
+                    alert: true,
+                    msg2: "Si",
+                    vacunaAsignada
+                });
+            }
+        } else {
+            res.render('verificar', {
+                vacunaF: true,
+                alert2: true,
+                alert: true,
+                msg2: "Si",
+                msg3: "Vacunas Agotadas"
+            });
+        }
+    } else if (dosis == "2") {
 
 
     }
