@@ -138,8 +138,8 @@ app.post('/ciudadanos', async(req, res) => {
                 let data;
                 try {
 
-                    console.log(__dirname + "\\archivo\\" + EDFile.name);
-                    data = await leerArchivoCSV(__dirname + "\\archivo\\" + EDFile.name);
+                    console.log(__dirname + "/archivo/" + EDFile.name);
+                    data = await leerArchivoCSV(__dirname + "/archivo/" + EDFile.name);
                 } catch (error) {
                     console.log(error);
                 }
