@@ -40,10 +40,22 @@ app.get('/verificar', function(req, res) {
 app.get('/ciudadanos', function(req, res) {
     res.render('ciudadanos', {});
 });
-app.get('/inoculados/:admin', function(req, res) {
+app.get('/inoculados/:admin', async(req, res)=> {
+    let usuarios = await getUsuarios();
+    
+
+    usuarios.forEach(element => {
+        console.log(element.cedula);
+        console.log(element.nombre);
+        console.log(element.vacunacion[0].nombre_vacuna);
+        console.log(element.vacunacion[0]);
+
+    });
+
     if (req.params.admin == 'admin') {
         res.render('inoculados', {
-            admin: true
+            admin: true,
+            usuarios
         });
     } else {
         res.render('inoculados', {
